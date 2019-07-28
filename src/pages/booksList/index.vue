@@ -4,7 +4,7 @@
     <li v-for="(book, index) in books" :key="index" @click="toDetail(book)">
       <img :src="book.image" alt="">
       <div class="book_content">
-        <p>{{book.title}}</p>
+        <p>{{book.length}}</p>
         <p>{{book.author}}</p>
         <p>{{book.publisher}}</p>
       </div>
@@ -15,14 +15,18 @@
 </template>
 <script>
 export default {
+  props: ["books"],
   data () {
     return {
       books:[]
     }
   },
   mounted () {
+    // console.log(this.books)
     // 获取数据
-    this.books = JSON.parse(this.$mp.query.books)
+    if (this.$mp) {
+      this.books = JSON.parse(this.$mp.query.books)
+    }
     // console.log(this.books);
   },
   methods: {

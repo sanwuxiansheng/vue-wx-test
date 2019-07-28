@@ -8,7 +8,7 @@
       <span>{{book.pubdate}}</span>
       <span>{{book.price}}</span>
     </div>
-    <button>收藏</button>
+    <button @click="isCollect">{{text}}</button>
     <article class="book_">
       <h1>作者简介</h1>
       <section>{{book.author_intro}}</section>
@@ -24,7 +24,10 @@ export default {
   data () {
     return {
       book: {},
-      index: 0
+      index: null,
+      isShow: false,
+      text: '收藏',
+      obj: {}
     }
   },
   mounted () {
@@ -32,7 +35,49 @@ export default {
     if (this.$mp) {
       // console.log(this.$mp)
       this.book = JSON.parse(this.$mp.query.book)
-      this.index = this.$mp.query.index
+      this.index = this.book.title
+      // console.log(this.book);
+    }
+    // console.log(this.index);
+    let storage = wx.getStorageSync('isShow')
+    if (storage[this.index]) {
+      this.isShow = true
+    } else {
+      this.isShow = false
+    }
+    if (this.isShow) {
+      this.text = '已收藏'
+    } else{
+      this.text = '收藏'
+    }
+  },
+  methods: {
+    isCollect() {
+      this.isShow = ! this.isShow
+      if (this.isShow) {
+        this.text = '已收藏'
+      } else{
+        this.text = '收藏'
+      }
+      // 用户提示信息
+      let title = this.isShow ? '收藏成功' : '取消收藏'
+      wx.showToast({
+        title
+      });
+      // 缓存数据
+      let isShow = this.isShow
+      let obj 
+      if (wx.getStorageSync('isShow')) {
+        obj = wx.getStorageSync('isShow')
+      }else{
+        obj = {}
+      }
+      let index = this.index
+      obj[index] = isShow
+      wx.setStorage({
+        key: 'isShow',
+        data: obj
+      });
     }
   }
 }

@@ -1,6 +1,8 @@
 {
   "pages":[
     "pages/books/main",
+    "pages/search/main",
+    
     "pages/booksList/main",
     "pages/detail/main",
     "pages/firstView/main"
